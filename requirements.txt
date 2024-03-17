@@ -73,3 +73,5 @@ tzdata==2024.1
 urllib3==2.1.0
 wheel==0.41.2
 zstandard==0.19.0
+fastapi
+openai

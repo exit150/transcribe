@@ -26,7 +26,7 @@ def segments_to_srt(segments):
     return srt_content  # Return the accumulated SRT content directly
 
 
-model = whisper.load_model("small.en")
+model = whisper.load_model("small")
 st.success("Whisper model loaded")
 
 if st.button("Generate Audio"):
@@ -35,6 +35,13 @@ if st.button("Generate Audio"):
         with NamedTemporaryFile(suffix="mp3") as temp:
             temp.write(audio_file.getvalue())
             temp.seek(0)
+            # load audio and pad/trim it to fit 30 seconds
+            audio = whisper.load_audio(temp.name)
+            audio = whisper.pad_or_trim(audio)
+            # make log-Mel spectrogram and move to the same device as the model
+            mel = whisper.log_mel_spectrogram(audio).to(model.device)
+            _, probs = model.detect_language(mel)
+            st.text(f"Detected language: {max(probs, key=probs.get)}")
             transcription = model.transcribe(temp.name)
             st.success("Transcription complete")
             transcription_segments = transcription["segments"]
