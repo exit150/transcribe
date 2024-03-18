@@ -4,7 +4,7 @@ import streamlit as st
 from tempfile import NamedTemporaryFile
 
 
-st.title("Whisper App")
+st.title("Generate SRT from Audio File")
 
 audio_file = st.file_uploader("Upload Audio", type=["wav", "mp3", "m4a"])
 
