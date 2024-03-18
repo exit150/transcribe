@@ -25,9 +25,13 @@ def segments_to_srt(segments):
     print("SRT content generated successfully")
     return srt_content  # Return the accumulated SRT content directly
 
+@st.cache_resource
+def load_model():
+    model = whisper.load_model("small")
+    st.success("Whisper model loaded")
+    return model
 
-model = whisper.load_model("small")
-st.success("Whisper model loaded")
+model = load_model()
 
 if st.button("Generate Audio"):
     if audio_file is not None:
