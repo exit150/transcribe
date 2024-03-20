@@ -14,6 +14,9 @@ app = FastAPI()
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
 
 @app.post("/transcribe")
 @limiter.limit("1/minute")
