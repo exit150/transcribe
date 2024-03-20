@@ -7,6 +7,7 @@ from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 from dotenv import load_dotenv
 import os
+from util import segments_to_srt
 
 load_dotenv()
 
@@ -49,5 +50,7 @@ async def create_file(request: Request,file: Annotated[bytes, File()]):
     }
     
     response = requests.post('https://api.openai.com/v1/audio/transcriptions', headers=headers, files=files)
+    response_segments = response.json()["segments"]
+    srt = segments_to_srt(response_segments)
     
-    return response.json()
+    return {"srt": srt}
